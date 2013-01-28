@@ -6,7 +6,7 @@ Long way from done and nearly no documentation - I'd stay away!
 
 ## Usage
 
-### Single Values
+You can validate single values:
 
     validate:value(<<"Test">>, string, [{min_length, 3}]).
     {valid,<<"Test">>}
@@ -21,7 +21,8 @@ Long way from done and nearly no documentation - I'd stay away!
     validate:value(<<"abc123">>, string, [{match, "^[a-z]+$"}]).
     {invalid, no_match}
 
-### Proplists
+Or proplists:
+
     Rules = [
         {<<"age">>, integer, [required, {range, 12, 32}]},
         {<<"gender">>, string, [required, {min_len, 1}, {max_len, 1},
@@ -30,68 +31,69 @@ Long way from done and nearly no documentation - I'd stay away!
     validate:proplist(Rules, [{<<"age">>, <<"10">>}]).
     {errors, [{<<"gender">>, empty}, {<<"age">>, {less_than, 12}}]}
 
-### Options available in all validations:
+Validations consist of a type and options. The following types and options are
+available:
 
-{trim, Bool} -> do not trim string and binary input
-strict -> minimal type coercion
+### All validations
 
-string -> binary
-    {required, Bool} -> {invalid, empty}
-    {min_length, N} -> {invalid, {less_than, N}}
-    {max_length, N} -> {invalid, {greater_than, N}}
-    {match, Re} -> {invalid, no_match}
-    url -> {invalid, not_url}
-    email -> {invalid, not_email}
+* {required, Bool} -> {invalid, empty}
+* {trim, Bool} -> do not trim string and binary input
+* strict -> minimal type coercion
+* {custom, Fun}
 
-integer -> integer
-    {required, Bool}
-    {min, Min}
-    {max, Max}
-    {range, Min, Max}
+#### string (converts to binary)
 
-decimal -> binary
-    {required, Bool}
-    {min, Min}
-    {max, Max}
-    {lt, Value}
-    {gt, Value}
-    {lte, Value}
-    {gte, Value}
-    {eq, Value}
+* {min_length, N} -> {invalid, {less_than, N}}
+* {max_length, N} -> {invalid, {greater_than, N}}
+* {match, Re} -> {invalid, no_match}
+* url -> {invalid, not_url}
+* email -> {invalid, not_email}
 
-json -> terms
-    {required, Bool}
+#### integer
 
-boolean -> true | false
-    {required, Bool}
-    {false, Values}
+* {min, Min}
+* {max, Max}
+* {range, Min, Max}
 
-{date, Format} -> {Y, M, D}
-    {required, Bool}
-    {gt, Date}
-    {gte, Date}
-    {lt, Date}
-    {lte, Date}
-    {range, Start, Stop}
+#### decimal (converts to binary)
 
-{time, Format} -> {{H, Min, S}, U}
-    {required, Bool}
-    {gt, Time}
-    {gte, Time}
-    {lt, Time}
-    {lte, Time}
-    {range, Start, Stop}
+* {min, Min}
+* {max, Max}
+* {lt, Value}
+* {gt, Value}
+* {lte, Value}
+* {gte, Value}
+* {eq, Value}
 
-{datetime, Format} -> {{Y, M, D}, {{H, Min, S}, U}}
-    {required, Bool}
-    {gt, DateTime}
-    {gte, DateTime}
-    {lt, DateTime}
-    {lte, DateTime}
-    {range, Start, Stop}
+#### json -> terms
 
-{custom, Fun}
-    {required, Bool} -> {invalid, Reason} | {valid, Value}
+#### boolean (converts to true or false)
+
+* {false, Values}
+
+#### {date, Format} (converts to {Y, M, D})
+
+* {gt, Date}
+* {gte, Date}
+* {lt, Date}
+* {lte, Date}
+* {range, Start, Stop}
+
+#### {time, Format} (converts to {{H, Min, S}, U})
+
+* {gt, Time}
+* {gte, Time}
+* {lt, Time}
+* {lte, Time}
+* {range, Start, Stop}
+
+#### {datetime, Format} (converts to {{Y, M, D}, {{H, Min, S}, U}})
+
+* {gt, DateTime}
+* {gte, DateTime}
+* {lt, DateTime}
+* {lte, DateTime}
+* {range, Start, Stop}
 
 TODO
 ====
